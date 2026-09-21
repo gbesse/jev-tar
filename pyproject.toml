@@ -1,0 +1,19 @@
+# Purpose: Package metadata and command entry point for the review toolkit.
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-tar"
+version = "0.1.0"
+description = "Defensible technology-assisted review with elusion statistics and append-only audit artifacts."
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Guillaume Besse"}]
+dependencies = []
+
+[project.scripts]
+jev-tar = "jev_tar.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

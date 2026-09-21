@@ -1,0 +1,9 @@
+# Purpose: Keep generated Python, review, cache and local-secret artifacts out of Git.
+__pycache__/
+.venv/
+*.egg-info/
+dist/
+.local/
+local-data/
+*.sqlite*
+.jev-cache*
