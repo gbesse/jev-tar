@@ -15,6 +15,10 @@ python -m examples.offline_demo
 
 The demo probabilities are synthetic fixtures, not measured Jev output.
 
+## Example: zero sampled misses still has an upper bound
+
+Run `python -m examples.zero_miss_interval` for a synthetic elusion sample with no responsive document found. The point estimate is zero, but the Wilson upper interval still leaves possible missed documents. The example makes no legal conclusion; use matter-specific sampling and attorney review for any real workflow.
+
 ## Call real Jev
 
 Set `TYPESAFE_API_KEY`, then run `jev-tar classify collection.jsonl --protocol protocol.json --out judgments.jsonl`. Requests are paid and sent to `api.typesafe.ai`. Resume skips ids already present; `audit.jsonl` is appended after every completed document. Run the one-request synthetic smoke test with `python scripts/live_smoke.py`.

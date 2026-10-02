@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jev-tar"
-version = "0.1.0"
+version = "0.1.1"
 description = "Defensible technology-assisted review with elusion statistics and append-only audit artifacts."
 requires-python = ">=3.11"
 license = {text = "MIT"}
