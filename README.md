@@ -54,3 +54,12 @@ Run `python -m compileall -q src tests`, `python -m unittest discover -s tests`,
 [DecisionPacks](https://github.com/gbesse/decisionpacks), [Question Forge](https://github.com/gbesse/question-forge), and [jev-screen](https://github.com/gbesse/jev-screen) address adjacent policy, question-design, and screening workflows.
 
 Independent project; not affiliated with TypeSafe AI. [API documentation](https://docs.typesafe.ai/api) · [Jev 1.13 model notes](https://docs.typesafe.ai/model-jaggedness/jev-1.13/)
+
+
+## 2026-11-05 — FR / EN / ES
+
+FR : La reprise `classify(..., existing=...)` vérifie désormais empreintes du dossier complet, du protocole et taille de bloc avant tout appel. Un même id avec texte ou protocole modifié est refusé. Les anciens résultats sans ces champs doivent être reclassés ; aucune migration silencieuse. Le raccourci `noul` est lu sans exiger simultanément une distribution, avec probabilité finie validée.
+
+EN: `classify(..., existing=...)` now checks complete source, protocol fingerprints and chunk size before any call. Reusing an ID with changed text or protocol is rejected. Old results without these fields must be reclassified; no silent migration. Direct `noul` is read without also requiring a distribution, with finite probability validation.
+
+ES: `classify(..., existing=...)` verifica huellas del registro completo, protocolo y tamaño de bloque antes de llamar. Reutilizar ID con texto o protocolo cambiado se rechaza. Reclasificar resultados antiguos sin estos campos; sin migración silenciosa. Lee `noul` directo sin exigir distribución simultánea, validando probabilidad finita.

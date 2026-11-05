@@ -29,16 +29,30 @@ def _chunks(text: str, chars: int) -> list[str]:
 def classify(rows: list[dict], protocol: dict, provider, *, audit_path: str | Path | None = None,
              existing: list[dict] | None = None, chunk_chars: int = 72_000) -> list[dict]:
     """Classify once per document (or chunk); max probability aggregation avoids hiding a hot passage."""
-    done = {row["id"]: row for row in (existing or [])}
+    import copy
+    error="Reprise incompatible avec le texte ou protocole / Resume incompatible with source or protocol / Reanudación incompatible con texto o protocolo"
+    if type(chunk_chars)is not int or not 1<=chunk_chars<=1000000:raise ValueError(error)
+    rows=copy.deepcopy(rows);protocol=copy.deepcopy(protocol);existing=copy.deepcopy(existing or [])
+    if any(not isinstance(r.get('id'),str)or not r['id']or not isinstance(r.get('text'),str)for r in rows)or len({r['id']for r in rows})!=len(rows):raise ValueError(error)
     questions, fingerprint = _questions(protocol), hashlib.sha256(canonical(protocol).encode()).hexdigest()
-    output = list(existing or [])
+    source={r['id']:hashlib.sha256(canonical(r).encode()).hexdigest()for r in rows}
+    done={}
+    for prior in existing:
+        rid=prior.get('id')
+        if rid in done or rid not in source or prior.get('protocol_fingerprint')!=fingerprint or prior.get('source_fingerprint')!=source[rid]or prior.get('chunk_chars')!=chunk_chars:raise ValueError(error)
+        done[rid]=prior
+    output = existing
     audit = Path(audit_path) if audit_path else None
     for row in rows:
         if row["id"] in done: continue
         answers = [provider.judge({"id": row["id"], "text": chunk}, questions)["answers"] for chunk in _chunks(row["text"], chunk_chars)]
-        probabilities = {key: max(float(answer[key].get("noul", answer[key]["probabilities"]["true"])) for answer in answers) for key in questions}
+        def probability(answer,key):
+            entry=answer[key];v=entry['noul']if 'noul'in entry else entry['probabilities']['true']
+            if type(v)not in(int,float)or not math.isfinite(v)or not 0<=v<=1:raise ValueError("Probabilité invalide / Invalid probability / Probabilidad inválida")
+            return float(v)
+        probabilities = {key: max(probability(answer,key) for answer in answers) for key in questions}
         judged = {**row, "probabilities": probabilities, "responsive_score": probabilities["responsive"],
-                  "privilege_score": probabilities["privilege"], "chunk_count": len(answers), "model": "jev-1.13.0"}
+                  "privilege_score": probabilities["privilege"], "chunk_count": len(answers), "model": "jev-1.13.0", "protocol_fingerprint":fingerprint,"source_fingerprint":source[row['id']],"chunk_chars":chunk_chars}
         output.append(judged)
         if audit:
             audit.parent.mkdir(parents=True, exist_ok=True)
