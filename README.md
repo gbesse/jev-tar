@@ -63,3 +63,12 @@ FR : La reprise `classify(..., existing=...)` vérifie désormais empreintes du 
 EN: `classify(..., existing=...)` now checks complete source, protocol fingerprints and chunk size before any call. Reusing an ID with changed text or protocol is rejected. Old results without these fields must be reclassified; no silent migration. Direct `noul` is read without also requiring a distribution, with finite probability validation.
 
 ES: `classify(..., existing=...)` verifica huellas del registro completo, protocolo y tamaño de bloque antes de llamar. Reutilizar ID con texto o protocolo cambiado se rechaza. Reclasificar resultados antiguos sin estos campos; sin migración silenciosa. Lee `noul` directo sin exigir distribución simultánea, validando probabilidad finita.
+
+
+## 2026-11-12 — FR / EN / ES
+
+FR : Mesurer la charge de revue ajoutée par propagation familiale sans revendiquer une efficacité statistique.
+
+EN: Measure family-propagation review workload without claiming statistical effectiveness.
+
+ES: Medir carga de revisión por propagación familiar sin afirmar eficacia estadística.
